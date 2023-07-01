@@ -26,11 +26,10 @@ const todosReducer = produce((state: State, action: Actions) => {
     case "ADD_TODO":
       const todo = {
         text: action.payload,
-        id: state.id,
+        id: state.todos.length ? Math.max(...state.todos.map((todo) => todo.id)) + 1 : 1,
         completed: false
       };
       state.todos.push(todo);
-      state.id = state.id + 1;
       break;
     case "EDIT_TODO":
       const index = state.todos.findIndex(todo => todo.id === action.payload.id);
