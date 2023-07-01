@@ -7,13 +7,13 @@ export default function NewTodo() {
   const [todo, setTodo] = useState("");
   const { dispatch } = useContext(context);
 
-  function handleSubmit(event) {
+  function handleSubmit(event: { preventDefault: () => void; }) {
     event.preventDefault();
 
     dispatch({ type: "ADD_TODO", payload: todo });
   }
 
-  function handleKeyDown(event) {
+  function handleKeyDown(event: React.KeyboardEvent) {
     if (event.keyCode === 13) {
       handleSubmit(event);
     }

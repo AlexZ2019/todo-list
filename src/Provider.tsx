@@ -1,18 +1,13 @@
 import * as React from "react";
 import produce from "immer";
 import { Dispatch } from "react";
+import { Todo } from "./interfaces";
 
 const { useReducer, createContext, useEffect } = React;
 
-interface Todo {
-  text: string;
-  id: number;
-  completed: boolean;
-}
-
 interface State {
-  todos?: Todo[];
-  id?: number;
+  todos: Todo[];
+  id: number;
 }
 
 type Actions =
@@ -29,25 +24,17 @@ const todosReducer = produce((state: State, action: Actions) => {
       state.todos = action.payload;
       break;
     case "ADD_TODO":
-      const todo: Todo = {
+      const todo = {
         text: action.payload,
         id: state.id,
         completed: false
       };
+      // @ts-ignore
       state.todos.push(todo);
       state.id = state.id + 1;
       break;
     case "EDIT_TODO":
-      state.todos = state.todos.map((todo) => {
-        if (todo.id === action.payload.id) {
-          return {
-            ...todo,
-            id: todo.id,
-            text: action.payload.text
-          };
-        }
-        return todo;
-      });
+
       break;
     case "DELETE_TODO":
       state.todos = state.todos.filter((el) => el.id !== action.payload);
@@ -72,17 +59,17 @@ interface Props {
   children: React.ReactNode;
 }
 
-let context;
+let context: React.Context<{ state: State; dispatch: React.Dispatch<Actions> }>;
 
 export default function Provider(props: Props) {
   context = createContext<{ state: State; dispatch: Dispatch<Actions> }>({
-    state: {},
+    state: initialState,
     dispatch: () => {}
   });
   const [state, dispatch] = useReducer(todosReducer, initialState);
 
   useEffect(() => {
-    const todos: string = window.localStorage.getItem("todos");
+    const todos: string = window.localStorage.getItem("todos") || "";
     dispatch({
       type: "SET_TODOS",
       payload: JSON.parse(todos) || []

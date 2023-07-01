@@ -8,10 +8,7 @@ const { useContext } = React;
 
 export default function Todo() {
   const { dispatch } = useContext(context);
-  const id = React.useRef({
-    value: 0
-  });
-  function handleClearButtonClick(event) {
+  function handleClearButtonClick(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
 
     dispatch({ type: "CLEAR_TODOS" });
@@ -20,7 +17,7 @@ export default function Todo() {
   return (
     <>
       <button onClick={handleClearButtonClick}>Clear items</button>
-      <TodoList id={id} />
+      <TodoList />
       <NewTodo />
     </>
   );
