@@ -33,7 +33,8 @@ const todosReducer = produce((state: State, action: Actions) => {
       state.id = state.id + 1;
       break;
     case "EDIT_TODO":
-      state.todos[action.payload.id].text = action.payload.text;
+      const index = state.todos.findIndex(todo => todo.id === action.payload.id);
+      state.todos[index].text = action.payload.text;
       break;
     case "DELETE_TODO":
       state.todos = state.todos.filter((el) => el.id !== action.payload);
