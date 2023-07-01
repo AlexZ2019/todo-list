@@ -10,13 +10,13 @@ interface State {
   id: number;
 }
 
-type Actions =
+export type Actions =
   | { type: "SET_TODOS"; payload: Todo[] }
   | { type: "ADD_TODO"; payload: string }
   | { type: "DELETE_TODO"; payload: number }
   | { type: "CLEAR_TODOS" }
   | { type: "TOGGLE_TODO_COMPLETED"; payload: Todo }
-  | { type: "EDIT_TODO"; payload: Todo };
+  | { type: "EDIT_TODO"; payload: { id: number, text: string } };
 
 const todosReducer = produce((state: State, action: Actions) => {
   switch (action.type) {
@@ -29,12 +29,11 @@ const todosReducer = produce((state: State, action: Actions) => {
         id: state.id,
         completed: false
       };
-      // @ts-ignore
       state.todos.push(todo);
       state.id = state.id + 1;
       break;
     case "EDIT_TODO":
-
+      state.todos[action.payload.id].text = action.payload.text;
       break;
     case "DELETE_TODO":
       state.todos = state.todos.filter((el) => el.id !== action.payload);
