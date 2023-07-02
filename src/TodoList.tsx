@@ -1,27 +1,44 @@
-import * as React from "react";
-import { context } from "./Provider";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Todo } from "./interfaces";
-import TotoItem from "./TotoItem";
+import TodoItem from "./TotoItem";
+const TodoList = () => {
+  // @ts-ignore
+  const todos = useSelector((state) => state.TodoReducer.todos)
+  const dispatch = useDispatch();
 
-const { useContext } = React;
+  function handleDelete(todo: Todo) {
+    dispatch({ type: "DELETE_TODO", payload: todo.id });
+  }
 
-export default function TodoList() {
-  const { state, dispatch } = useContext(context);
+  function handleCheckboxClick(todo: Todo) {
+    dispatch({ type: "TOGGLE_TODO_COMPLETED", payload: todo });
+  }
 
-  if (!state.todos) {
-    return <div />;
+  const onChange = useCallback((id, text) => {
+    dispatch({ type: "EDIT_TODO", payload: { id, text } });
+  }, [])
+
+  if (!todos) {
+    return <div/>
   }
 
   return (
     <>
       <ul className="todo-list">
-        {state.todos.map((todo: Todo) => {
+        {todos.map((todo: Todo) => {
           return (
-            <TotoItem todo={todo} dispatch={dispatch} key={todo.id}/>
-          );
-        })}
+            <TodoItem
+              key={todo.id}
+              handleDelete={handleDelete}
+              handleCheckboxClick={handleCheckboxClick}
+              todo={todo}
+              onChange={onChange}
+            />
+          )})}
       </ul>
     </>
-  );
+  )
+
 }
+export default TodoList;

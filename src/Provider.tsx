@@ -1,7 +1,7 @@
 import * as React from "react";
-import produce from "immer";
 import { Dispatch } from "react";
 import { Todo } from "./interfaces";
+import { produce } from "immer";
 
 const { useReducer, createContext, useEffect } = React;
 

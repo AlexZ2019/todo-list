@@ -1,34 +1,24 @@
+import React, { FC, memo } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import * as React from "react";
 import { Todo } from "./interfaces";
-import { Actions } from "./Provider";
-import { FC, useState } from "react";
 
-type PropsType = {
+type Props = {
   todo: Todo,
-  dispatch: React.Dispatch<Actions>
+  onChange: (id: number, text: string) => void,
+  handleCheckboxClick: (todo: Todo) => void,
+  handleDelete: (todo: Todo) => void
 }
-const TotoItem: FC<PropsType> = ({todo, dispatch}) => {
-  const [todoText, setTodoText] = useState<string>(todo.text || "");
-  function handleDelete(todo: Todo) {
-    dispatch({ type: "DELETE_TODO", payload: todo.id });
-  }
 
-  function updateTodo() {
-    dispatch({ type: "EDIT_TODO", payload: { id: todo.id, text: todoText } });
-  }
+const TodoItem: FC<Props> = memo(({todo, onChange, handleCheckboxClick, handleDelete}) => {
 
-  function handleCheckboxClick(todo: Todo) {
-    dispatch({ type: "TOGGLE_TODO_COMPLETED", payload: todo });
-  }
-
-  return <AnimatePresence exitBeforeEnter key={todo.id} >
-    <motion.li
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="todo-list__item"
-    >
+  return (
+    <AnimatePresence exitBeforeEnter>
+      <motion.li
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="todo-list__item"
+      >
                 <span onClick={() => handleCheckboxClick(todo)}>
                   {todo.completed ? (
                     <span className="todo-list__item__completed" />
@@ -37,18 +27,18 @@ const TotoItem: FC<PropsType> = ({todo, dispatch}) => {
                   )}
                 </span>
         <input
-          value={todoText}
-          onChange={(e => setTodoText(e.target.value))}
+          onChange={e => onChange(todo.id, e.target.value)}
+          value={todo.text}
         />
-        <button onClick={updateTodo}>Save</button>
-      <span
-        className="todo-list__item__delete-button"
-        onClick={() => handleDelete(todo)}
-      >
+        <span
+          className="todo-list__item__delete-button"
+          onClick={() => handleDelete(todo)}
+        >
                   X
                 </span>
-    </motion.li>
-  </AnimatePresence>
-}
+      </motion.li>
+    </AnimatePresence>
+  )
+});
 
-export default TotoItem;
+export default TodoItem;

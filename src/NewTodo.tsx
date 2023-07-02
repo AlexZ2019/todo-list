@@ -1,15 +1,15 @@
 import * as React from "react";
-import { context } from "./Provider";
+import { useDispatch } from "react-redux";
 
 const { useState, useContext } = React;
 
 export default function NewTodo() {
   const [todo, setTodo] = useState("");
-  const { dispatch } = useContext(context);
+  const dispatch  = useDispatch();
 
   function handleSubmit(event: { preventDefault: () => void; }) {
     event.preventDefault();
-
+    setTodo('');
     dispatch({ type: "ADD_TODO", payload: todo });
   }
 

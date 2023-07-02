@@ -1,16 +1,15 @@
 import * as React from "react";
-import { context } from "./Provider";
 
 import TodoList from "./TodoList";
 import NewTodo from "./NewTodo";
+import { useDispatch } from "react-redux";
 
 const { useContext } = React;
 
 export default function Todo() {
-  const { dispatch } = useContext(context);
+  const dispatch = useDispatch();
   function handleClearButtonClick(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
-
     dispatch({ type: "CLEAR_TODOS" });
   }
 
