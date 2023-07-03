@@ -30,4 +30,4 @@ export default function NewTodo() {
       <button onClick={handleSubmit}>Add</button>
     </>
   );
-}
+};

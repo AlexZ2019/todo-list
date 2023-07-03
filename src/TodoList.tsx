@@ -2,9 +2,9 @@ import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Todo } from "./interfaces";
 import TodoItem from "./TotoItem";
+import { getTodos } from "./Redux/selectors";
 const TodoList = () => {
-  // @ts-ignore
-  const todos = useSelector((state) => state.TodoReducer.todos)
+  const todos = useSelector(getTodos);
   const dispatch = useDispatch();
 
   function handleDelete(todo: Todo) {
